@@ -1,0 +1,43 @@
+/* Main CSS Document */
+/* This one has global settings that affect ALL pages */
+
+/* Note this document contains css media querys to allow for dark theme */
+
+/* GLOBAL */
+body {
+    font-family: new-order, sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    margin: 0px;
+}
+
+@media (prefers-color-scheme: dark) {
+body {
+    background-color: #111;
+    color: #FFFFFF;
+}}
+
+/* MAIN */
+main {
+    padding: 4px;
+}
+
+
+/* NAV */
+nav {
+    background-color: #333;
+    overflow: auto;
+    white-space: nowrap;
+}
+
+nav a {
+    display: inline-block;
+    color: white;
+    text-align: center;
+    padding: 14px;
+    text-decoration: none;
+}
+
+nav a:hover {
+    background-color: #222
+}

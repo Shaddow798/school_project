@@ -1,12 +1,12 @@
-from flask import Flask
+from flask import Flask, render_template
 
 
 app = Flask(__name__)
 
 
 @app.route('/')
-def hello():
-    return 'Hello, World!'
+def index():
+    return render_template("index.html", title="Homepage")
 
 
 # Start a basic inbuilt flsak web server, should not use in a production but none of this is made for production.
