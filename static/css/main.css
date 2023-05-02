@@ -9,6 +9,10 @@ body {
     font-weight: 400;
     font-style: normal;
     margin: 0px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
 }
 
 @media (prefers-color-scheme: dark) {
@@ -17,9 +21,14 @@ body {
     color: #FFFFFF;
 }}
 
+/* Header */
+header {
+    padding-left : 4px;
+}
+
 /* MAIN */
 main {
-    padding: 4px;
+    padding-left : 10%;
 }
 
 
@@ -40,4 +49,14 @@ nav a {
 
 nav a:hover {
     background-color: #222
+}
+
+
+/* FOOTER */
+
+footer {
+    background-color: #d3d3d3;
+    padding: 10px;
+    text-align: center;
+    margin-top: auto;
 }
