@@ -2,5 +2,15 @@
 {% block content %}
     <p>This page shows you all the machines.</p>
 
+{%for item in results%}
+<h3>
+    <a class="machine_link" href="/machine/{{item[0]}}">
+    {{item[1]}}
+    </a>
+</h3>
 
+<p>
+    {{item[2]}}
+</p>
+{% endfor %}
 {% endblock %}

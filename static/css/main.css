@@ -11,9 +11,10 @@ body {
     margin: 0px;
     min-height: 100vh;
     display: flex;
-    flex-direction: column;
+    flex-direction: column;'
+    rotate: 1deg;'
 }
-}
+
 
 @media (prefers-color-scheme: dark) {
 body {
@@ -23,14 +24,30 @@ body {
 
 /* Header */
 header {
-    padding-left : 4px;
+    padding-left: 10%;
+    padding-right: 10%;
 }
+
+@media (max-width: 900px) {
+header{
+    padding-left: 8px;
+    padding-right: 8px;
+
+}}
 
 /* MAIN */
 main {
     padding-left : 10%;
+    padding-right: 10%;
+
 }
 
+@media (max-width: 900px) {
+main{
+    padding-left: 8px;
+    padding-right: 8px;
+
+}}
 
 /* NAV */
 nav {
@@ -60,3 +77,8 @@ footer {
     text-align: center;
     margin-top: auto;
 }
+
+@media (prefers-color-scheme: dark) {
+footer {
+    background-color: #333;
+}}
