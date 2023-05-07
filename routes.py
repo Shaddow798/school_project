@@ -1,5 +1,5 @@
 import wheel.bdist_wheel
-from flask import Flask, render_template
+from flask import Flask, render_template, url_for
 import sqlite3
 
 app = Flask(__name__)
@@ -22,6 +22,16 @@ def machines():
     cur.execute('SELECT * FROM Machine')
     results = cur.fetchall()
     return render_template("all_machines.html", results=results, title="Machines")
+
+
+@app.route("/machine/<int:id>")
+def machine(id):
+    conn = sqlite3.connect('project.db')
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM Machine WHERE id=?",(id,))
+    machine = cur.fetchone()
+    return render_template('machine.html', title="Machine", machine=machine,)
+
 
 
 # Start a basic inbuilt flask web server, should not use in a production but none of this is made for production.
