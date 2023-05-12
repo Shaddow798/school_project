@@ -42,6 +42,15 @@ def all_resources():
     return render_template('all_resources.html', results=results, title="Resources")
 
 
+@app.route("/resources/<int:id>")
+def resource(id):
+    conn = sqlite3.connect('project.db')
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM Resource WHERE id=?",(id,))
+    data = cur.fetchone()
+    return render_template('resources.html', title="Resources", resource=data,)
+
+
 # Start a basic inbuilt flask web server, should not use in a production but none of this is made for production.
 if __name__ == '__main__':
     app.run(debug=True,port=8080)
