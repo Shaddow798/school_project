@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+    <p>This page shows you all the resources.</p>
+
+{%for item in results%}
+<h3>
+    <a class="resource_link" href="/resource/{{item[0]}}">
+    {{item[1]}}
+    </a>
+</h3>
+
+<p>
+    {{item[2]}}
+</p>
+{% endfor %}
+{% endblock %}
