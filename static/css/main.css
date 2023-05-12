@@ -2,6 +2,7 @@
 /* This one has global settings that affect ALL pages */
 
 /* Note this document contains css media querys to allow for dark theme */
+/* meta tags for other devices  */
 
 /* GLOBAL */
 body {
@@ -28,21 +29,19 @@ header {
     padding-right: 10%;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1000px) {
 header{
     padding-left: 8px;
     padding-right: 8px;
-
 }}
 
 /* MAIN */
 main {
     padding-left : 10%;
     padding-right: 10%;
-
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1000px) {
 main{
     padding-left: 8px;
     padding-right: 8px;

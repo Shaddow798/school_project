@@ -29,9 +29,17 @@ def machine(id):
     conn = sqlite3.connect('project.db')
     cur = conn.cursor()
     cur.execute("SELECT * FROM Machine WHERE id=?",(id,))
-    machine = cur.fetchone()
-    return render_template('machine.html', title="Machine", machine=machine,)
+    data = cur.fetchone()
+    return render_template('machine.html', title="Machine", machine=data,)
 
+
+@app.route("/all_resources")
+def all_resources():
+    conn = sqlite3.connect('project.db')
+    cur = conn.cursor()
+    cur.execute('SELECT * FROM Resource')
+    results = cur.fetchall()
+    return render_template('all_resources.html', results=results, title="Resources")
 
 
 # Start a basic inbuilt flask web server, should not use in a production but none of this is made for production.
