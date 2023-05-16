@@ -13,6 +13,13 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
+# Image upload code is mostly privaterd from the flask documentation https://flask.palletsprojects.com/en/2.2.x/patterns/fileuploads/
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+# This loads in the database file for the folder of the project.
 def get_db_connection():
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
     db_path = os.path.join(BASE_DIR, "project.db")
@@ -59,6 +66,7 @@ def machine_submit():
             flash('Title is required!')
         elif not description:
             flash('Description is required!')
+
         else:
             conn = get_db_connection()
             conn.execute('INSERT INTO Machine (name, description)'
@@ -66,6 +74,22 @@ def machine_submit():
             conn.commit()
             conn.close()
             return redirect(url_for('machines'))
+
+        # More privatred code form the flask documentation
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        # If the user does not select a file, the browser submits an
+        # empty file without a filename.
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            return redirect(url_for('download_file', name=filename))
+
     return render_template('submission.html', title="Submit A Machine")
 
 
@@ -95,4 +119,3 @@ def error(e):
 # Start a basic inbuilt flask web server, should not use in a production but none of this is made for production.
 if __name__ == '__main__':
     app.run(debug=True, port=8080)
-
