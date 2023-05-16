@@ -1,9 +1,16 @@
 import wheel.bdist_wheel
 from flask import Flask, render_template, url_for, request, redirect, flash
+from werkzeug.utils import secure_filename
 import sqlite3
 import os
 
 app = Flask(__name__)
+# This key is temp af
+app.secret_key = 'oelwE=ZN#h~UrJv{+-d,-u`)i;34|Q'
+UPLOAD_FOLDER = '/static/images/'
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
 def get_db_connection():
@@ -25,7 +32,7 @@ def about():
 
 @app.route("/all_machines")
 def machines():
-    conn = sqlite3.connect('project.db')
+    conn = get_db_connection()
     cur = conn.cursor()
     cur.execute('SELECT * FROM Machine')
     results = cur.fetchall()
@@ -51,20 +58,20 @@ def machine_submit():
         if not name:
             flash('Title is required!')
         elif not description:
-            flash('Content is required!')
+            flash('Description is required!')
         else:
             conn = get_db_connection()
-            conn.execute('INSERT INTO Machine (1, 2) VALUES (?, ?)',
-                         (name, description))
+            conn.execute('INSERT INTO Machine (name, description)'
+                         'VALUES (?, ?)', (name, description))
             conn.commit()
             conn.close()
-            return redirect(url_for('index'))
+            return redirect(url_for('machines'))
     return render_template('submission.html', title="Submit A Machine")
 
 
 @app.route("/all_resources")
 def all_resources():
-    conn = sqlite3.connect('project.db')
+    conn = get_db_connection()
     cur = conn.cursor()
     cur.execute('SELECT * FROM Resource')
     results = cur.fetchall()
@@ -73,7 +80,7 @@ def all_resources():
 
 @app.route("/resources/<int:id>")
 def resource(id):
-    conn = sqlite3.connect('project.db')
+    conn = get_db_connection()
     cur = conn.cursor()
     cur.execute("SELECT * FROM Resource WHERE id=?",(id,))
     data = cur.fetchone()

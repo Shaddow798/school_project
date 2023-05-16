@@ -48,6 +48,14 @@ main{
 
 }}
 
+/* Flashes for errors */
+.flashes {
+    color: red;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
 /* NAV */
 nav {
     background-color: #333;
@@ -81,3 +89,4 @@ footer {
 footer {
     background-color: #333;
 }}
+
