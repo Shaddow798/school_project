@@ -74,15 +74,17 @@ def machine_submit():
         elif file.filename == '':
             flash('No selected file')
         else:
-            conn = get_db_connection()
-            conn.execute('INSERT INTO Machine (name, description)'
-                         'VALUES (?, ?)', (name, description))
-            conn.commit()
-            conn.close()
             if file and allowed_file(file.filename):
                 filename = secure_filename(file.filename)
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-                flash("Image Uploaded Succsessfuly")
+            complete_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            conn = get_db_connection()
+            conn.execute('INSERT INTO Machine (name, description, picture)'
+                         'VALUES (?, ?, ?)', (name, description, complete_path))
+            conn.commit()
+            conn.close()
+
+            flash("Success Creating entry")
             return redirect(url_for('machines'))
     return render_template('submission.html', title="Submit A Machine")
 
