@@ -7,7 +7,7 @@ import os
 app = Flask(__name__)
 # This key is temp af
 app.secret_key = 'oelwE=ZN#h~UrJv{+-d,-u`)i;34|Q'
-UPLOAD_FOLDER = '/static/images/'
+UPLOAD_FOLDER = 'static/images/'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -62,34 +62,28 @@ def machine_submit():
         name = request.form["machine"]
         description = request.form["machine_description"]
 
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+
         if not name:
             flash('Title is required!')
         elif not description:
             flash('Description is required!')
-
+        elif file.filename == '':
+            flash('No selected file')
         else:
             conn = get_db_connection()
             conn.execute('INSERT INTO Machine (name, description)'
                          'VALUES (?, ?)', (name, description))
             conn.commit()
             conn.close()
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                flash("Image Uploaded Succsessfuly")
             return redirect(url_for('machines'))
-
-        # More privatred code form the flask documentation
-        if 'file' not in request.files:
-            flash('No file part')
-            return redirect(request.url)
-        file = request.files['file']
-        # If the user does not select a file, the browser submits an
-        # empty file without a filename.
-        if file.filename == '':
-            flash('No selected file')
-            return redirect(request.url)
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return redirect(url_for('download_file', name=filename))
-
     return render_template('submission.html', title="Submit A Machine")
 
 
