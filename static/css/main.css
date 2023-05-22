@@ -19,7 +19,7 @@ body {
 
 @media (prefers-color-scheme: dark) {
 body {
-    background-color: #111;
+    background-color: #000;
     color: #FFFFFF;
 }}
 
@@ -58,7 +58,7 @@ main{
 
 /* NAV */
 nav {
-    background-color: #333;
+    background-color: #222;
     overflow: auto;
     white-space: nowrap;
 }
@@ -72,9 +72,17 @@ nav a {
 }
 
 nav a:hover {
-    background-color: #222
+    background-color: #111
 }
 
+nav .left {
+    display: inline-block;
+}
+
+nav .right {
+    display: inline-block;
+    float: right;
+}
 
 /* FOOTER */
 

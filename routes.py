@@ -107,6 +107,19 @@ def resource(id):
     return render_template('resources.html', title="Resources", resource=data,)
 
 
+# Account Login and signup
+@app.route("/login")
+def login():
+    flash("Feature not implemted yet")
+    return render_template('accounts/login.html', title="Login")
+
+
+@app.route("/register")
+def register():
+    flash("Feature not implemted yet")
+    return render_template('accounts/register.html', title="Register")
+
+
 @app.errorhandler(404)
 def error(e):
     return render_template("error.html", error=e)
