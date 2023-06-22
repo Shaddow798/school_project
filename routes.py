@@ -43,7 +43,7 @@ def machines():
     cur = conn.cursor()
     cur.execute('SELECT * FROM Machine')
     results = cur.fetchall()
-    return render_template("all_machines.html", results=results, title="Machines")
+    return render_template("machines/all_machines.html", results=results, title="Machines")
 
 
 @app.route("/machine/<int:id>")
@@ -107,6 +107,39 @@ def resource(id):
     return render_template('resources.html', title="Resources", resource=data,)
 
 
+@app.route("/resources/submit")
+def resources_submit():
+    if request.method == 'POST':
+        name = request.form["resources"]
+        description = request.form["resources_description"]
+
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+
+        if not name:
+            flash('Title is required!')
+        elif not description:
+            flash('Description is required!')
+        elif file.filename == '':
+            flash('No selected file')
+        else:
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            complete_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            conn = get_db_connection()
+            conn.execute('INSERT INTO Resources (name, description, picture)'
+                         'VALUES (?, ?, ?)', (name, description, complete_path))
+            conn.commit()
+            conn.close()
+
+            flash("Success Creating entry")
+            return redirect(url_for('resources'))
+    return render_template('submission.html', title="Submit A Resource", submit_type="resources")
+
+
 # Account Login and signup
 @app.route("/login")
 def login():
@@ -120,6 +153,7 @@ def register():
     return render_template('accounts/register.html', title="Register")
 
 
+@app.errorhandler(500)
 @app.errorhandler(404)
 def error(e):
     return render_template("error.html", error=e)
