@@ -4,11 +4,12 @@ from werkzeug.utils import secure_filename
 import sqlite3
 import os
 
+
 app = Flask(__name__)
-# This key is temp af
+# At some point I will remove this key into a env file or something.
 app.secret_key = 'oelwE=ZN#h~UrJv{+-d,-u`)i;34|Q'
 UPLOAD_FOLDER = 'static/images/'
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -21,10 +22,9 @@ def allowed_file(filename):
 
 # This loads in the database file for the folder of the project.
 def get_db_connection():
-    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-    db_path = os.path.join(BASE_DIR, "project.db")
-    conn = sqlite3.connect(db_path)
-    return conn
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    db_path = os.path.join(base_dir, "project.db")
+    return sqlite3.connect(db_path)
 
 
 @app.route('/')
@@ -48,7 +48,7 @@ def machines():
 
 @app.route("/machine/<int:id>")
 def machine(id):
-    conn = sqlite3.connect('project.db')
+    conn = get_db_connection()
     cur = conn.cursor()
     cur.execute("SELECT * FROM Machine WHERE id=?",(id,))
     data = cur.fetchone()
@@ -86,7 +86,7 @@ def machine_submit():
 
             flash("Success Creating entry")
             return redirect(url_for('machines'))
-    return render_template('submission.html', title="Submit A Machine")
+    return render_template('submission.html', title="Submit A Machine", submit_type="machine")
 
 
 @app.route("/all_resources")
